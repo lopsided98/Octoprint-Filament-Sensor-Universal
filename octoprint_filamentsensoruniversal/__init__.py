@@ -142,9 +142,11 @@ class FilamentSensorUniversal(octoprint.plugin.EventHandlerPlugin,
             # gpio chardev events
             with self._gpio_lock:
                 if self._runout_debouncer is not None:
+                    self._runout_debouncer.update()
                     # Filament runs out when sensor goes inactive
                     runout_triggered = self._runout_debouncer.falling
                 if self._jam_debouncer is not None:
+                    self._jam_debouncer.update()
                     jam_triggered = self._jam_debouncer.rising
 
             if runout_triggered:
@@ -173,7 +175,7 @@ class FilamentSensorUniversal(octoprint.plugin.EventHandlerPlugin,
                         consumer="OctoPrint filament runout sensor")
                     runout_line.set_direction_input()
                     runout_line.set_flags(gpiod.LINE_REQ_FLAG_BIAS_PULL_UP |
-                                          (gpiod.LINE_REQ_FLAG_ACTIVE_LOW if self.runout_switch else 0))
+                                          (gpiod.LINE_REQ_FLAG_ACTIVE_LOW if self.runout_switch == 0 else 0))
                     self._runout_debouncer = Debouncer(
                         runout_line, self.runout_bounce)
                     self._logger.info("Filament runout sensor active on GPIO chip: %s, line: %d",
@@ -191,7 +193,7 @@ class FilamentSensorUniversal(octoprint.plugin.EventHandlerPlugin,
                     jam_line.request(consumer="OctoPrint filament jam sensor")
                     jam_line.set_direction_input()
                     jam_line.set_flags(gpiod.LINE_REQ_FLAG_BIAS_PULL_UP |
-                                       (gpiod.LINE_REQ_FLAG_ACTIVE_LOW if self.jam_switch else 0))
+                                       (gpiod.LINE_REQ_FLAG_ACTIVE_LOW if self.jam_switch == 0 else 0))
                     self._jam_debouncer = Debouncer(jam_line, self.jam_bounce)
                     self._logger.info("Filament jam sensor active on GPIO chip: %s, line: %d",
                                       self.jam_chip, self.jam_pin)
@@ -287,9 +289,9 @@ class FilamentSensorUniversal(octoprint.plugin.EventHandlerPlugin,
             self._print_running = False
 
     def runout_handler(self):
+        self._logger.info("Out of filament!")
         # Don't do anything when a print is not currently in progress
         if self._print_running:
-            self._logger.info("Out of filament!")
             if self.runout_pause_print:
                 self._logger.info("Pausing print.")
                 self._printer.pause_print()
@@ -299,12 +301,13 @@ class FilamentSensorUniversal(octoprint.plugin.EventHandlerPlugin,
                 self._printer.commands(self.runout_gcode)
 
     def jam_handler(self):
+        self._logger.info("Filament jammed!")
         # Don't do anything when a print is not currently in progress
         if self._print_running:
-            self._logger.info("Filament jammed!")
             if self.jammed_pause_print:
                 self._logger.info("Pausing print.")
                 self._printer.pause_print()
+                self._print_running = False
             if self.jammed_gcode:
                 self._logger.info("Sending jammed GCODE")
                 self._printer.commands(self.jammed_gcode)
