@@ -5,14 +5,14 @@
 
 # The plugin's identifier, has to be unique
 from setuptools import setup
-plugin_identifier = "filamentrevolutions"
+plugin_identifier = "filamentsensoruniversal"
 
 # The plugin's python package, should be "octoprint_<plugin identifier>", has to be unique
-plugin_package = "octoprint_filamentrevolutions"
+plugin_package = "octoprint_filamentsensoruniversal"
 
 # The plugin's human readable name. Can be overwritten within OctoPrint's internal data via __plugin_name__ in the
 # plugin module
-plugin_name = "Octoprint-Filament-Revolutions"
+plugin_name = "OctoPrint-Filament-Sensor-Universal"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
 plugin_version = "1.0.0"
@@ -22,19 +22,19 @@ plugin_version = "1.0.0"
 plugin_description = """A revamped and rewritten filament monitor with jam and runout support that pauses the print when your filament runs out"""
 
 # The plugin's author. Can be overwritten within OctoPrint's internal data via __plugin_author__ in the plugin module
-plugin_author = "Jérôme Wiedemann"
+plugin_author = "Ben Wolsieffer"
 
 # The plugin's author's mail address.
-plugin_author_email = ""
+plugin_author_email = "benwolsieffer@gmail.com"
 
 # The plugin's homepage URL. Can be overwritten within OctoPrint's internal data via __plugin_url__ in the plugin module
-plugin_url = "https://github.com/RomRider/Octoprint-Filament-Revolutions"
+plugin_url = "https://github.com/lopsided98/OctoPrint-Filament-Sensor-Universal"
 
 # The plugin's license. Can be overwritten within OctoPrint's internal data via __plugin_license__ in the plugin module
 plugin_license = "AGPLv3"
 
 # Any additional requirements besides OctoPrint should be listed here
-plugin_requires = ['RPi.GPIO']
+plugin_requires = []
 
 # --------------------------------------------------------------------------------------------------------------------
 # More advanced options that you usually shouldn't have to touch follow after this point
