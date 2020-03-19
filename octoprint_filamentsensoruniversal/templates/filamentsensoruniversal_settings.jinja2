@@ -21,7 +21,7 @@
         <label class="control-label">{{ _('Runout Sensor Debounce Time:') }}</label>
         <div class="controls" data-toggle="tooltip" title="{{ _('When a sensor state change happens, wait for this amount of time to wait for the signal to stabilize.') }}">
             <input type="number" step="any" min="0" class="input-mini text-right" data-bind="value: settings.plugins.filamentsensoruniversal.runout_bounce">
-            <span class="add-on">ms</span>
+            <span class="add-on">sec</span>
         </div>
     </div>
     <div class="control-group">
@@ -68,7 +68,7 @@
         <label class="control-label">{{ _('Jam Sensor Debounce Time:') }}</label>
         <div class="controls" data-toggle="tooltip" title="{{ _('When a sensor state change happens, wait for this amount of time to wait for the signal to stabilize.') }}">
             <input type="number" step="any" min="0" class="input-mini text-right" data-bind="value: settings.plugins.filamentsensoruniversal.jam_bounce">
-            <span class="add-on">ms</span>
+            <span class="add-on">sec</span>
         </div>
     </div>
     <div class="control-group">

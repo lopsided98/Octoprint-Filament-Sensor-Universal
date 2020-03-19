@@ -175,7 +175,7 @@ class FilamentSensorUniversal(octoprint.plugin.EventHandlerPlugin,
                         consumer="OctoPrint filament runout sensor")
                     runout_line.set_direction_input()
                     runout_line.set_flags(gpiod.LINE_REQ_FLAG_BIAS_PULL_UP |
-                                          (gpiod.LINE_REQ_FLAG_ACTIVE_LOW if self.runout_switch == 0 else 0))
+                                          (0 if self.runout_switch else gpiod.LINE_REQ_FLAG_ACTIVE_LOW))
                     self._runout_debouncer = Debouncer(
                         runout_line, self.runout_bounce)
                     self._logger.info("Filament runout sensor active on GPIO chip: %s, line: %d",
@@ -193,7 +193,7 @@ class FilamentSensorUniversal(octoprint.plugin.EventHandlerPlugin,
                     jam_line.request(consumer="OctoPrint filament jam sensor")
                     jam_line.set_direction_input()
                     jam_line.set_flags(gpiod.LINE_REQ_FLAG_BIAS_PULL_UP |
-                                       (gpiod.LINE_REQ_FLAG_ACTIVE_LOW if self.jam_switch == 0 else 0))
+                                       (0 if self.jam_switch else gpiod.LINE_REQ_FLAG_ACTIVE_LOW))
                     self._jam_debouncer = Debouncer(jam_line, self.jam_bounce)
                     self._logger.info("Filament jam sensor active on GPIO chip: %s, line: %d",
                                       self.jam_chip, self.jam_pin)
@@ -207,14 +207,14 @@ class FilamentSensorUniversal(octoprint.plugin.EventHandlerPlugin,
         return dict(
             runout_chip="",  # Default is disabled
             runout_pin=0,
-            runout_bounce=1000,  # Debounce 1000 ms
+            runout_bounce=1.0,  # Debounce 1 sec
             runout_switch=0,    # Normally Open
             runout_gcode='',
             runout_pause_print=True,
 
             jam_chip="",  # Default is disabled
             jam_pin=0,
-            jam_bounce=1000,  # Debounce 1000 ms
+            jam_bounce=1.0,  # Debounce 1 sec
             jam_switch=1,  # Normally Closed
             jammed_gcode='',
             jammed_pause_print=True
